@@ -1,0 +1,3 @@
+Info Message Playwright test started
+ERROR:Element not found
+CRITICAL:Unauthorized access

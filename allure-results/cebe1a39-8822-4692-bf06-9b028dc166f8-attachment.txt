@@ -1,0 +1,3 @@
+Promise { 'Hello' }
+Promise { 42 }
+Rajib
