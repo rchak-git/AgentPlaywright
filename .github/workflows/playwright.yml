@@ -11,31 +11,61 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # 2. Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20'
+          cache: 'npm'
 
-      # 3. Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # 4. Install Playwright browsers
-      - name: Install Playwright Browsers
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # 5. Run Playwright tests
-      - name: Run tests
-        run: npm run test:first
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=html
 
-      # 6. Upload Playwright report (optional)
-      - name: Upload Playwright Test Report
+      - name: Upload Playwright HTML Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report
+          retention-days: 7
+
+  deploy-report:
+    if: always()   # always publish, even if tests fail
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Download HTML report artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+          path: ./playwright-report
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./playwright-report
+
+  deploy:
+    if: always()
+    needs: deploy-report
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy GitHub Pages
+        uses: actions/deploy-pages@v4
