@@ -1,0 +1,1 @@
+Performing action on locator('#apple-add')

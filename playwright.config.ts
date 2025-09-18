@@ -36,7 +36,7 @@ export default defineConfig({
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure',
-    headless: false,
+    headless: true,
     testIdAttribute: 'data-test',
     video: 'retain-on-failure',
   },
