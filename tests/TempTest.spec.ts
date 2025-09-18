@@ -23,6 +23,7 @@ test('Search for a product on Spree Commerce', async ({ page }) => {
   // Verify that we're on the search results page
   await expect(page).toHaveURL(/.*\/search.*/);
   await page.keyboard.press("Escape");
+  console.log("Hello");
 });
 
 
