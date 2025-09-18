@@ -24,3 +24,8 @@ test('Search for a product on Spree Commerce', async ({ page }) => {
   await expect(page).toHaveURL(/.*\/search.*/);
   await page.keyboard.press("Escape");
 });
+
+
+
+
+

@@ -651,7 +651,7 @@ test('Mapped Object Type: ', async ({page}) => {
 
 });
 
-test.only('Type Literal Type', async ({page}) => 
+test('Type Literal Type', async ({page}) => 
 {
  type cart ="apple"|"banana"|"orange";
  type actions = "add"|"remove";

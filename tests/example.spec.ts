@@ -8,7 +8,7 @@ test('has title', { tag: "@first" }, async ({ page }) => {
 
 });
 
-test('get started link', async ({ page }) => {
+test('get started link' ,{ tag:"@first"}, async ({ page }) => {
   await page.goto('https://playwright.dev/');
 
   // Click the get started link.
