@@ -1,2 +1,0 @@
-The key is username and the value is #username
-The key is password and the value is #password

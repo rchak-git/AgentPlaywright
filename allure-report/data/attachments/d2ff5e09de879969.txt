@@ -1,0 +1,2 @@
+[ 'Test Runner', 'API Testing', 'Playwright Inspector', 'Codegen' ]
+[ 'Test Runner', 'API Testing', 'Playwright Inspector' ]
