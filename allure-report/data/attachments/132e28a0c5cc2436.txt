@@ -1,3 +1,0 @@
-The selector values for key: usernameInput is #username
-The selector values for key: passwordInput is #password
-The selector values for key: loginButton is #signin

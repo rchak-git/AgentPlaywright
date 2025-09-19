@@ -1,1 +1,0 @@
-The logged in user has role Admin

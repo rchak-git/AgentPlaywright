@@ -1,2 +1,0 @@
-name is Max
-[ 'hello', 'Bye', 'Welcome' ]

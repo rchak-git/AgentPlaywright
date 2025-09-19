@@ -1,2 +1,0 @@
-Retry worked after attempt count 1
-Retry worked after attempt count 2
