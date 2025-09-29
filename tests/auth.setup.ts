@@ -2,6 +2,7 @@ import { test as setup, expect } from '@playwright/test';
 
 setup('Create Admin Auth', async ({ page, context }) => {
     // Go to login page
+    /*
     const email = 'admin@practicesoftwaretesting.com';
     const password = 'welcome01';
     const admin01File = '.auth/Admin01.json';
@@ -13,4 +14,5 @@ setup('Create Admin Auth', async ({ page, context }) => {
 
     // Save authentication state to .auth file
     await context.storageState({ path: admin01File });
+    */
 });

@@ -14,6 +14,11 @@ test.describe('Login Tests with no auth', () => {
 
     test('test User lands on MainHomePage', async ({ page }) => {
         await expect(page.getByRole('link', { name: 'Practice Software Testing -' })).toBeVisible();
+       // await page.pause();
+        const loc_FirstCell = page.locator("xpath=//td[contains(normalize-space(),'INV-20250000026')]");
+        let text_FirstCell = await loc_FirstCell.innerText();
+        await expect(page.locator('tbody')).toContainText('COMPLETED');
+        console.log("text content of first cell is : " + text_FirstCell);
 
     });
 

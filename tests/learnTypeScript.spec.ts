@@ -1,6 +1,6 @@
 import { test, Page, expect,Locator } from '@playwright/test';
 import { user, role } from '../types/types';
-import {TestClass} from './pages/TestClass';
+import {TestClass} from '../pages/TestClass';
 import {LinkList} from '../utils/LinkList';
 
 
