@@ -258,7 +258,7 @@ test('Button - Learning click of buttons and handling events', async ({ page }) 
 
 
 
-test.only('Playwright Event Model Demo', async ({ page }) => {
+test('Playwright Event Model Demo', async ({ page }) => {
   // Go to a test page
   await page.goto('https://testautomationpractice.blogspot.com/');
   await page.waitForLoadState('networkidle');

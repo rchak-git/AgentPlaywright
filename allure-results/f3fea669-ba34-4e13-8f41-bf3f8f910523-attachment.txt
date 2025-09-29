@@ -1,4 +1,0 @@
-[Console] Hello from the browser console!
-[Dialog] Simple Alert: I am an alert box!
-[Dialog] Prompt Alert: Please enter your name:
-Field2 value after dblclick: Hello World!
