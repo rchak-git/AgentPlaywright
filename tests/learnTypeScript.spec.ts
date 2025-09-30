@@ -1,6 +1,6 @@
 import { test, Page, expect,Locator } from '@playwright/test';
 import { user, role } from '../types/types';
-import {TestClass} from './pages/TestClass';
+import {TestClass} from '../pages/TestClass';
 import {LinkList} from '../utils/LinkList';
 
 
@@ -651,7 +651,7 @@ test('Mapped Object Type: ', async ({page}) => {
 
 });
 
-test.only('Type Literal Type', async ({page}) => 
+test('Type Literal Type', async ({page}) => 
 {
  type cart ="apple"|"banana"|"orange";
  type actions = "add"|"remove";

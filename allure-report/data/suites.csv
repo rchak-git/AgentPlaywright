@@ -1,3 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","2743","Working with Arrays","chromium","Mon Sep 08 12:58:29 EDT 2025","passed","Mon Sep 08 12:58:31 EDT 2025","","learnTypeScript.spec.ts","",""
-"","1694","Create Admin Auth","setup","Mon Sep 08 12:58:26 EDT 2025","passed","Mon Sep 08 12:58:27 EDT 2025","","auth.setup.ts","",""
+"","9935","get started link","chromium","Fri Sep 19 12:45:53 EDT 2025","passed","Fri Sep 19 12:46:02 EDT 2025","","example.spec.ts","",""
+"","9716","has title","chromium","Fri Sep 19 12:45:53 EDT 2025","passed","Fri Sep 19 12:46:02 EDT 2025","","example.spec.ts","",""
+"","13756","Create Admin Auth","setup","Fri Sep 19 12:45:35 EDT 2025","passed","Fri Sep 19 12:45:48 EDT 2025","","auth.setup.ts","",""

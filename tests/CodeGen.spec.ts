@@ -8,4 +8,9 @@ test('test', async ({ page }) => {
   await page.getByRole('searchbox', { name: 'Search' }).fill('API Testing');
   await page.getByRole('link', { name: 'API testing', exact: true }).click();
   await expect(page.locator('h1')).toContainText('API testing');
+  await page.pause();
+
+  await expect(page
+    .getByRole('listitem'))
+    .toHaveText(['apple', 'banana', 'orange']);
 });
