@@ -6,13 +6,13 @@ export interface LoginTestData {
 }
 
 export const loginTestData: { [key: string]: LoginTestData } = {
-    validLogin: {
+    Login_01: {
         dataId: "validLogin",
-        username: "Admin",
-        password: "admin123",
+        username: "tomsmith",
+        password: "SuperSecretPassword!",
         expectedResult: "Dashboard"
     },
-    invalidLogin: {
+    Login_02: {
         dataId: "invalidLogin",
         username: "invalid_user",
         password: "invalid_password",
