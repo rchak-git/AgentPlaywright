@@ -1,5 +1,8 @@
 import {test,expect,TestInfo,Page,Locator } from '@playwright/test';
 import  {SelfHealingLocator}  from '../utils/SelfHealingLocator';
+import fs from 'fs';
+import path from 'path';
+import {loginTestData} from '../testData/loginTestData';
 //import {allure} from 'allure-playwright';
 
 
@@ -316,5 +319,228 @@ test('Playwright Event Model Demo', async ({ page }) => {
   await dblClickBtn.dblclick();
   await expect(field2).toHaveValue("Hello World!");
   console.log("Field2 value after dblclick:", await field2.inputValue());
+
+});
+
+//https://practice.expandtesting.com/tooltips
+
+test('Tooltip Handling', async ({ page }) => {
+  await page.goto('https://practice.expandtesting.com/tooltips');
+  //await page.waitForLoadState('networkidle');
+
+  
+  let tooltipTrigger = page.getByRole('button', { name: 'Tooltip on top' });
+  await tooltipTrigger.waitFor({ state: 'visible', timeout: 10000 });
+  await tooltipTrigger.hover();
+
+ 
+  let tooltip = page.locator("//div[normalize-space()='Tooltip on top' and contains(@id,'tooltip')]");
+
+  await tooltip.waitFor({ state: 'visible', timeout: 5000 });
+  await expect(tooltip).toBeVisible();
+  console.log("Tooltip text:", await tooltip.textContent());
+  // Move mouse away to hide tooltip
+  await page.mouse.move(0, 0);
+  await tooltip.waitFor({ state: 'hidden', timeout: 5000 });
+ 
+  await expect(tooltip).toBeHidden(); 
+ 
+   tooltipTrigger = page.getByRole('button', { name: 'Tooltip on top' });
+  await tooltipTrigger.hover();
+  tooltip = page.locator("div.tooltip-inner");
+  await tooltip.waitFor({ state: 'visible', timeout: 5000 });
+  await expect(tooltip).toBeVisible();
+  console.log("Tooltip text for another tooltip:", await tooltip.textContent());
+  // await page.pause();
+  
+});
+
+test('Tooltip Handling - refined', async ({ page }) => {
+  await page.goto('https://practice.expandtesting.com/tooltips');
+
+  // Native tooltip (title attribute)
+  const nativeBtn = page.getByRole('button', { name: 'Tooltip on top' });
+  const nativeTooltipText = await nativeBtn.getAttribute('title');
+  console.log("Native tooltip text:", nativeTooltipText);
+
+  // Hover to trigger custom tooltip
+  await nativeBtn.hover();
+  const tooltip = page.locator("div.tooltip-inner:has-text('Tooltip on top')");
+  await expect(tooltip).toBeVisible();
+  console.log("Custom tooltip text:", await tooltip.textContent());
+
+  // Move mouse away to hide tooltip
+  await page.mouse.move(0, 0);
+  await expect(tooltip).toBeHidden();
+});
+
+
+
+test('Frames - how to work inside frames -Not working', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/iframe');
+  let frameObj = await page.$("iframe[title='Rich Text Area']");
+  let frameContent = await frameObj?.contentFrame();
+ await page.pause();
+ // await frameContent?.locator("#tinymce").waitFor({state:"visible",timeout:10000});
+  await frameContent?.locator("#tinymce").fill("This is example Text",{timeout:10000});
+  console.log( await frameContent?.locator("html").innerText());
+
+  
+});
+
+
+
+
+
+test('TinyMCE - type in iframe', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/iframe');
+
+  const frameObj = await page.$("iframe[title='Rich Text Area']");
+  const frame = await frameObj?.contentFrame();
+
+  const editorBody = frame?.locator('body#tinymce');
+  await editorBody?.waitFor({ state: 'visible', timeout: 5000 });
+
+  // Focus the editor
+  await editorBody?.click();
+
+  // Type text (like a real user)
+  await editorBody?.type("This is example Text", { delay: 50 });
+
+  console.log(await editorBody?.innerText());
+});
+
+
+test('File upload', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/upload');
+  let loc_FileUpload = page.locator('#file-upload');
+  loc_FileUpload.waitFor({state:"visible",timeout:5000});
+  await loc_FileUpload.setInputFiles("C:/Users/rchak/OneDrive/Documents/RajibWork/TempText.txt");
+  let loc_Submit = page.getByRole('button', { name: 'Upload' });
+  await loc_Submit.click();
+  let loc_PageUpload = page.locator('#uploaded-files');
+  await loc_PageUpload.waitFor({state:'visible'});
+ await  expect( loc_PageUpload).toHaveText('TempText.txt');
+
+
+ // await page.pause();
+});
+
+test('Download using page.on (flaky)', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/download');
+
+  // Register download listener
+  page.on('download', async (download) => {
+    await download.saveAs('C:/Users/rchak/Downloads/file-on.txt');
+    console.log('Download saved via page.on');
+  });
+
+  // Click the file to download
+  await page.locator('a', { hasText: 'some-file.txt' }).click();
+
+  // Immediately log (may run before file is saved!)
+  console.log('Clicked download link');
+});
+
+
+test('Download using waitForEvent (reliable)', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/download');
+
+  // Wait for download while clicking the link
+  /*
+  const [download] = await Promise.all([
+    page.waitForEvent('download'), // wait for the next download
+    page.locator('a', { hasText: 'some-file.txt' }).click()
+  ]);
+  */
+   const download = await page.waitForEvent("download")
+
+  // Save file after download captured
+  await download.saveAs('C:/Users/rchak/Downloads/file-await.txt');
+  console.log('Download saved via waitForEvent');
+});
+
+
+
+test('Download with predicate and timeout', async ({ page }) => {
+  await page.goto('https://the-internet.herokuapp.com/download');
+
+  // Wait for a download where the filename contains "some-file"
+  const [download] = await Promise.all([
+    page.waitForEvent('download', {
+      predicate: d => d.suggestedFilename().includes('some-file'),
+      timeout: 10000, // wait max 10 seconds
+    }),
+    // Trigger the download
+    page.locator('a', { hasText: 'some-file.txt' }).click(),
+  ]);
+
+  // Save the downloaded file
+  const downloadPath = path.join(__dirname, download.suggestedFilename());
+  await download.saveAs(downloadPath);
+
+  console.log('Downloaded file:', download.suggestedFilename());
+
+  // Assert filename contains 'some-file'
+  expect(download.suggestedFilename()).toContain('some-file');
+  
+});
+
+
+
+test.describe("Test the Login functionality", () => {
+  let page:Page;
+test.beforeAll(async ({browser}) => {
+    let context = await browser.newContext();
+     page = await context.newPage();
+    console.log('Setup before all tests');
+    
+  });
+
+  test.beforeEach(async ()=>
+  {
+   await page.goto("https://the-internet.herokuapp.com/login");
+
+  })
+
+  test.afterEach(async () =>
+  { await page.close();});
+
+test("test Group with valid Login data", async ({  }) => {
+    const loginData = loginTestData["Login_01"]; // <-- Use your test data key
+
+
+    // Fill username
+    const loc_UserName = page.getByRole("textbox", { name: "Username" });
+    await loc_UserName.click();
+    console.log("Value entered for userName :" + loginData.username);
+    await loc_UserName.fill(loginData.username);
+
+    // Fill password
+    const loc_Password = page.getByRole("textbox", { name: "Password" });
+    await loc_Password.fill(loginData.password);
+
+    // Click login button
+    await page.getByRole("button", { name: "Login" }).click();
+
+    });
+
+    test("test Group with invalid Login data", async ({  }) => {
+    const loginData = loginTestData["Login_02"]; // <-3
+
+    // Fill username
+    const loc_UserName = page.getByRole("textbox", { name: "Username" });
+    await loc_UserName.click();
+    console.log("Value entered for userName :" + loginData.username);
+    await loc_UserName.fill(loginData.username);
+
+    // Fill password
+    const loc_Password = page.getByRole("textbox", { name: "Password" });
+    await loc_Password.fill(loginData.password);
+
+    // Click login button
+    await page.getByRole("button", { name: "Login" }).click();
+
+    });
 
 });
